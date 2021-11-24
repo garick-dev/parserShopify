@@ -10,7 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@shopify/shopify-api": "^2.0.0",
+    "@types/express": "file:node_modules/@types/express",
+    "axios": "^0.24.0",
+    "dotenv": "file:node_modules/dotenv",
     "express": "^4.17.1",
+    "typescript": "file:node_modules/typescript",
     "xlsx": "^0.17.4"
   }
 }
