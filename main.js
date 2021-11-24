@@ -1,52 +1,38 @@
 const { Shopify }= require("@shopify/shopify-api");
 const { DataType } = require("@shopify/shopify-api");
-// let title = "title";
-// let description = "description";
-// let tags= ["tag1", "tag2", "tag3"];
-// let sku = "264123213214";
-// let price = "26";
-// let urlImg = "https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg";
-// let urlArr =[
-//     {
-//         "src": `${urlImg}`,
-//     }, {
-//         "src": `${urlImg}`,
-//     }]
-//     ;
-//
-// let optionMaterial = "Серебро"
-// let quantity = "3";
-//
-const api = async (title, description, tags, urlArr, price, sku) => {
+
+const api = async (title, description, tags, price, sku, quantity, urlArr) => {
     const client = new Shopify.Clients.Rest("souvenirboutique.myshopify.com", "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");
     const data = await client.post({
         path: 'products',
         data: {"product":
                     {
-                        "title":`${title}`,
-                        "body_html": `${description}`,
+                        "title": title,
+                        "body_html": description,
                         "vendor": "Souvenirboutique",
                         "product_type":"Apparel & Accessories",
-                        "tags":`${tags}`,
+                        "tags": tags,
                         "images": urlArr,
                         "options": {
                             "name": "Материал",
                         },
                         "variants": [ {
-                                // "option1": `${optionMaterial}`,
-                                "price": `${price}`,
-                                "sku" : `${sku}`,
-                                // "inventory_quantity": `${quantity}`,
+                                "option1": "test",
+                                "title" : title,
+                                "price": price,
+                                "sku" : sku,
+                                "inventory_policy": "continue",
+                                "inventory_quantity": quantity,
+                                'fulfillment_service': "manual",
+                                "inventory_management": "shopify",
                         }]
                     }
                 },
         type: DataType.JSON,
     });
     // console.log(data.body.product.images);
-    console.log(data);
+    console.log(data.body.product.variants);
 }
-// api();
-
 
 const xlsx = require("xlsx");
 
@@ -79,10 +65,14 @@ for (let item of data) {
             tags.push(item[key]);
         }
         else if (key.includes("SKU")) {
-            sku = item[key];
+            let num = 0;
+            num = item[key];
+            sku = num.toString();
         }
         else if (key.includes("ЦЕНА")) {
-            price = item[key];
+            let num = 0;
+            num = item[key];
+            price = num.toString();
         }
         else if (key.includes("КОЛИЧЕСТВО")) {
             let num = 0;
@@ -96,21 +86,12 @@ for (let item of data) {
         }
 
     }
-  // setTimeout( () =>  api(title, description, tags, price, sku, urlArr), 3000 ) ;
-    console.log("TITLE",title);
-    console.log("DESC", description);
-    console.log("TAGS", tags);
-    console.log("price", price);
-    console.log("SKU", sku);
-    console.log("quantity", typeof quantity);
-    console.log("IMG", urlArr);
+  setTimeout( () =>  api(title, description, tags, price, sku,quantity, urlArr), 3000 ) ;
+
 
 }
 
 // console.log(data);
-
-
-
 
 
 // const newWB = xlsx.utils.book_new();
